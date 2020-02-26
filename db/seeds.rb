@@ -92,3 +92,6 @@ froot_punch = Kombucha.find_or_create_by(name: 'Froot Punch', fizziness_level: '
 [white_tea, concord_grape, banana, pineapple].each do |ingredient|
   froot_punch.recipe_items.find_or_create_by(ingredient_id: ingredient.id, amount: sample.call)
 end
+
+# Creating user for testing authentication
+User.find_or_create_by(name: "Fullscript", email: "fullscript@fullscript.com")

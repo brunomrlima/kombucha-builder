@@ -3,10 +3,13 @@
 class ApiController < ApplicationController
   protected
     def current_user
-      @user ||= User.find(request.headers["USER_ID"])
+      # USER-ID == HTTP_USER_ID to work with Postman
+      @user ||= User.find(request.headers["USER-ID"]) if request.headers["USER-ID"]
     end
 
     def authenticate_user!
-      current_user.present?
+      unless current_user.present?
+        render json: { error: "Authentication failed." }, status: :unprocessable_entity
+      end
     end
 end
