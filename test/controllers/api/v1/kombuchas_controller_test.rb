@@ -2,9 +2,9 @@
 
 require 'test_helper'
 
-class Api::KombuchasControllerTest < ActionDispatch::IntegrationTest
+class Api::V1::KombuchasControllerTest < ActionDispatch::IntegrationTest
   test "returns collection of kombuchas" do
-    get '/api/kombuchas', params: {}, headers: headers
+    get '/api/v1/kombuchas', params: {}, headers: headers
 
     assert_equal response_body.length, Kombucha.count
   end
@@ -12,20 +12,20 @@ class Api::KombuchasControllerTest < ActionDispatch::IntegrationTest
   test "shows one kombucha" do
     kombucha = kombuchas(:guinny_pop)
 
-    get "/api/kombuchas/#{kombucha.id}", headers: headers
+    get "/api/v1/kombuchas/#{kombucha.id}", headers: headers
 
     assert_equal response_body['id'], kombucha.id
   end
 
   test "creates a new kombucha" do
-    post "/api/kombuchas", params: kombucha_params, headers: headers
+    post "/api/v1/kombuchas", params: kombucha_params, headers: headers
 
     assert_response :success
     assert_not_nil Kombucha.find(response_body['id'])
   end
 
   test "does not create kombucha if fizziness level is invalid" do
-    post "/api/kombuchas", params: invalid_kombucha_params, headers: headers
+    post "/api/v1/kombuchas", params: invalid_kombucha_params, headers: headers
 
     assert_response :unprocessable_entity
     assert_not_nil response_body['errors']
@@ -34,7 +34,7 @@ class Api::KombuchasControllerTest < ActionDispatch::IntegrationTest
   test "updates a kombucha" do
     kombuchas(:guinny_pop)
 
-    post "/api/kombuchas", params: kombucha_params, headers: headers
+    post "/api/v1/kombuchas", params: kombucha_params, headers: headers
 
     assert_response :success
     assert_not_nil Kombucha.find(response_body['id'])
@@ -43,7 +43,7 @@ class Api::KombuchasControllerTest < ActionDispatch::IntegrationTest
   test "does not update kombucha if fizziness level is invalid" do
     kombucha = kombuchas(:guinny_pop)
 
-    patch "/api/kombuchas/#{kombucha.id}", params: invalid_kombucha_params, headers: headers
+    patch "/api/v1/kombuchas/#{kombucha.id}", params: invalid_kombucha_params, headers: headers
 
     assert_response :unprocessable_entity
     assert_not_nil response_body['errors']
@@ -56,7 +56,7 @@ class Api::KombuchasControllerTest < ActionDispatch::IntegrationTest
   def headers
     user = users(:first_user)
 
-    { "USER_ID": user.id }
+    { "HTTP_USER_ID": user.id }
   end
 
   def kombucha_params
