@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_224058) do
+ActiveRecord::Schema.define(version: 2020_02_26_234127) do
 
   create_table "ingredients", force: :cascade do |t|
     t.string "name"
@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_224058) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["kombucha_id"], name: "index_ratings_on_kombucha_id"
+    t.index ["user_id", "kombucha_id"], name: "index_ratings_on_user_id_and_kombucha_id", unique: true
     t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
