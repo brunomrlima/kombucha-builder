@@ -21,4 +21,10 @@ class RatingTest < ActiveSupport::TestCase
     assert_not duplicated_rating.save, 'rating is not unique'
   end
 
+  test 'invalid if score not between 1..5' do
+    @rating.score = 6
+    refute @rating.valid? 'rating is valid with score outside 1..5'
+    assert_not_nil @rating.errors[:score]
+  end
+
 end
