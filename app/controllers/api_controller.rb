@@ -3,7 +3,7 @@
 class ApiController < ApplicationController
   protected
     def current_user
-      # USER-ID == HTTP_USER_ID to work with Postman
+      # USER-ID == HTTP_USER_ID to work with Postman/curl
       @user ||= User.find(request.headers["USER-ID"]) if request.headers["USER-ID"]
     end
 
