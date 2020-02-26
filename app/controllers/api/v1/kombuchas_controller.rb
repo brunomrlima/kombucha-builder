@@ -5,7 +5,7 @@ class Api::V1::KombuchasController < ApiController
   before_action :set_kombucha, only: [:show, :update]
 
   def index
-    @kombuchas = Kombucha.all
+    @kombuchas = Kombucha.filter_attributes(get_filter_params)
     render json: @kombuchas.map(&:to_h), status: :ok
   end
 
@@ -38,5 +38,9 @@ class Api::V1::KombuchasController < ApiController
 
     def kombucha_params
       params.require(:kombucha).permit(:name, :fizziness_level)
+    end
+
+    def get_filter_params
+      params.permit(:fizziness_level, :caffeine_free, :vegan)
     end
 end

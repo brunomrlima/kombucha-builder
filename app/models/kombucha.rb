@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class Kombucha < ApplicationRecord
+  include Filterable
+  scope :filter_by_fizziness_level, -> (fizziness_level) { where(fizziness_level: fizziness_level) }
+
   has_many :recipe_items
   has_many :ingredients, through: :recipe_items
 
