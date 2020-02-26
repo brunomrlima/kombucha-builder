@@ -8,4 +8,9 @@ class Ingredient < ApplicationRecord
   validates :base, inclusion: { in: [ true, false ] }
   validates :caffeine_free, inclusion: { in: [ true, false ] }
   validates :vegan, inclusion: { in: [ true, false ] }
+
+  def self.return_list_of_ingredients_ids_with(attribute, value)
+    where("#{attribute} = ?", value).pluck(:id)
+  end
+
 end
