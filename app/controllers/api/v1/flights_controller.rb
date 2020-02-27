@@ -14,7 +14,8 @@ class Api::V1::FlightsController < ApiController
   end
 
   def create
-    kombuchas_samples_ids = Kombucha.n_samples_with_different_base(4)
+    selected_kombucha = Kombucha.find_by_id(flight_params[:kombucha_id])
+    selected_kombucha.present? ? kombuchas_samples_ids = Kombucha.n_samples_with_different_base(3, selected_kombucha) : kombuchas_samples_ids = Kombucha.n_samples_with_different_base(4)
     flight = Flight.new(name: "Kombuchas #{kombuchas_samples_ids}")
     if flight.save
       kombuchas_samples_ids.each do |kombucha_id|
@@ -25,5 +26,11 @@ class Api::V1::FlightsController < ApiController
       render json: { errors: flight.errors }, status: :unprocessable_entity
     end
   end
+
+  private
+
+    def flight_params
+      params.permit(:kombucha_id, :score)
+    end
 
 end
