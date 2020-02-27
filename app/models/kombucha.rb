@@ -3,7 +3,6 @@
 class Kombucha < ApplicationRecord
   include Filterable
   scope :filter_by_fizziness_level, -> (fizziness_level) { where(fizziness_level: fizziness_level) }
-  # score :different_base, -> {where(ingredients: )}
 
   has_many :recipe_items
   has_many :ingredients, through: :recipe_items
@@ -22,20 +21,16 @@ class Kombucha < ApplicationRecord
     }
   end
 
-  def self.filter_by_caffeine_free(caffeine_free)
-    filter_by_attribute("caffeine_free", caffeine_free)
-  end
-
-  def self.filter_by_vegan(vegan)
-    filter_by_attribute("vegan", vegan)
-  end
-
   def self.filter_by_attribute(attribute, value)
-    value = JSON.parse(value)
-    if value
-      where.not(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_ids_with(attribute, !value)}))
+    if attribute == "fizziness_level"
+      self.filter_by_fizziness_level(value)
     else
-      where(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_ids_with(attribute, value)}))
+      value = JSON.parse(value)
+      if value
+        where.not(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_ids_with(attribute, !value)}))
+      else
+        where(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_ids_with(attribute, value)}))
+      end
     end
   end
 
