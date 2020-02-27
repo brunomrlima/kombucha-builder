@@ -17,6 +17,7 @@ class Kombucha < ApplicationRecord
       "id": self.id,
       "name": self.name,
       "fizziness_level": self.fizziness_level,
+      "average_score": self.average_score,
       "ingredients": self.ingredients.map(&:name)
     }
   end
@@ -40,10 +41,6 @@ class Kombucha < ApplicationRecord
 
   def average_score
     self.ratings.average(:score)
-  end
-
-  def self.return_four_random_samples_ids
-    self.pluck(:id).sample(4).sort
   end
 
   def self.n_samples_with_different_base(n_samples)

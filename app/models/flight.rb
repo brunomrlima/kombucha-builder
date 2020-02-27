@@ -8,7 +8,9 @@ class Flight < ApplicationRecord
     {
         "id": self.id,
         "name": self.name,
-        "kombuchas": self.kombuchas.map(&:name)
+        "kombuchas": self.kombuchas do |kombucha|
+            kombucha.to_h
+        end
     }
   end
 end

@@ -2,14 +2,14 @@
 
 class Api::V1::FlightsController < ApiController
   before_action :authenticate_user!
-  # skip_before_action :verify_authenticity_token, :except => [:update, :create]
+  skip_before_action :verify_authenticity_token, :except => [:update, :create]
   protect_from_forgery with: :null_session, only: [:update, :create]
   # before_action :set_rating, only:[:show, :update]
   #
-  # def index
-  #   @ratings = current_user.ratings
-  #   render json: @ratings.map(&:to_h), status: :ok
-  # end
+  def index
+    @flights = Flight.all
+    render json: @flights.map(&:to_h), status: :ok
+  end
   #
   # def show
   #     render json: @rating.to_h
