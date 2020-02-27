@@ -3,7 +3,7 @@
 class Api::V1::FlightsController < ApiController
   before_action :authenticate_user!
   # skip_before_action :verify_authenticity_token, :except => [:update, :create]
-  # protect_from_forgery with: :null_session, only: [:update, :create]
+  protect_from_forgery with: :null_session, only: [:update, :create]
   # before_action :set_rating, only:[:show, :update]
   #
   # def index
@@ -12,15 +12,19 @@ class Api::V1::FlightsController < ApiController
   # end
   #
   # def show
-  #   render json: @rating.to_h
+  #     render json: @rating.to_h
   # end
-  #
+
   def create
-    @rating = current_user.ratings.new(rating_params)
-    if @rating.save
-      render json: @rating.to_h
+    kombuchas_samples_ids = Kombucha.return_four_random_samples_ids
+    flight = Flight.new(name: "Kombuchas #{kombuchas_samples_ids}")
+    if flight.save
+      kombuchas_samples_ids.each do |kombucha_id|
+        flight.flight_items.create(kombucha_id: kombucha_id)
+      end
+      render json: flight.to_h
     else
-      render json: { errors: @rating.errors }, status: :unprocessable_entity
+      render json: { errors: flight.errors }, status: :unprocessable_entity
     end
   end
   #

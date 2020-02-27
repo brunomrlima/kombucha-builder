@@ -40,4 +40,8 @@ class Kombucha < ApplicationRecord
   def average_score
     self.ratings.average(:score)
   end
+
+  def self.return_four_random_samples_ids
+    self.pluck(:id).sample(4).sort
+  end
 end
