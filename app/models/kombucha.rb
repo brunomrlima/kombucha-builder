@@ -3,6 +3,7 @@
 class Kombucha < ApplicationRecord
   include Filterable
   scope :filter_by_fizziness_level, -> (fizziness_level) { where(fizziness_level: fizziness_level) }
+  # score :different_base, -> {where(ingredients: )}
 
   has_many :recipe_items
   has_many :ingredients, through: :recipe_items
@@ -43,5 +44,9 @@ class Kombucha < ApplicationRecord
 
   def self.return_four_random_samples_ids
     self.pluck(:id).sample(4).sort
+  end
+
+  def self.n_samples_with_different_base(n_samples)
+    where(id: self.includes(:ingredients).where(ingredients: {id: Ingredient.select_n_different_bases(n_samples)})).pluck(:id).sample(n_samples).sort
   end
 end

@@ -16,7 +16,7 @@ class Api::V1::FlightsController < ApiController
   # end
 
   def create
-    kombuchas_samples_ids = Kombucha.return_four_random_samples_ids
+    kombuchas_samples_ids = Kombucha.n_samples_with_different_base(4)
     flight = Flight.new(name: "Kombuchas #{kombuchas_samples_ids}")
     if flight.save
       kombuchas_samples_ids.each do |kombucha_id|

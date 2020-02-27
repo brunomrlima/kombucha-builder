@@ -13,4 +13,8 @@ class Ingredient < ApplicationRecord
     where("#{attribute} = ?", value).pluck(:id)
   end
 
+  def self.select_n_different_bases(n_samples)
+    where(base: true).pluck(:id).sample(n_samples)
+  end
+
 end
