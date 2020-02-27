@@ -10,9 +10,9 @@ class Api::V1::RatingsController < ApiController
     render json: @ratings.map(&:to_h), status: :ok
   end
 
-  # def show
-  #   render json: @kombucha.to_h
-  # end
+  def show
+    render json: @rating.to_h
+  end
 
   def create
     @rating = current_user.ratings.new(rating_params)
@@ -45,8 +45,4 @@ class Api::V1::RatingsController < ApiController
       params.permit(:score, :kombucha_id)
     end
 
-  #
-  #   def get_filter_params
-  #     params.permit(:fizziness_level, :caffeine_free, :vegan)
-  #   end
 end
