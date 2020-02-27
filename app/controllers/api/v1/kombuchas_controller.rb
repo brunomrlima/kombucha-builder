@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::KombuchasController < ApiController
+  skip_before_action :verify_authenticity_token, :except => [:update, :create]
+  protect_from_forgery with: :null_session, only: [:update, :create]
   before_action :authenticate_user!
   before_action :set_kombucha, only: [:show, :update]
 
