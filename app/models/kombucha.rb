@@ -69,4 +69,10 @@ class Kombucha < ApplicationRecord
     self.ingredients.return_base.id
   end
 
+  def popularity
+    kombucha_flight_items = self.flight_items.count
+    n_flight_items = FlightItem.count
+    ((kombucha_flight_items.to_f/n_flight_items)*100).ceil
+  end
+
 end
