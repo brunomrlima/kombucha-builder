@@ -32,9 +32,19 @@ class Kombucha < ApplicationRecord
         where(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_with(attribute, value)}))
       end
     elsif attribute == "including"
-      where(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_with("name", value)}))
+      ingredients_ids = []
+      values = value.split(",").map(&:strip)
+      values.each do |value|
+        ingredients_ids = ingredients_ids | Ingredient.return_list_of_ingredients_with("name", value).pluck(:id)
+      end
+      self.where(id: Kombucha.includes(:ingredients).where(ingredients: {id: ingredients_ids}))
     elsif attribute == "not_including"
-      where.not(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_with("name", value)}))
+      ingredients_ids = []
+      values = value.split(",").map(&:strip)
+      values.each do |value|
+        ingredients_ids = ingredients_ids | Ingredient.return_list_of_ingredients_with("name", value).pluck(:id)
+      end
+      where.not(id: Kombucha.includes(:ingredients).where(ingredients: {id: ingredients_ids}))
     end
   end
 
