@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V1::RatingsController < ApiController
-  protect_from_forgery with: :null_session, if: Proc.new {|c| c.request.format.json? }
+  protect_from_forgery with: :null_session
   before_action :authenticate_user!
-  before_action :set_rating, only: [:show, :update]
 
   def index
     @ratings = current_user.ratings
@@ -11,6 +10,7 @@ class Api::V1::RatingsController < ApiController
   end
 
   def show
+    @rating = set_rating
     render json: @rating.to_h
   end
 
@@ -24,14 +24,14 @@ class Api::V1::RatingsController < ApiController
   end
 
   def update
-    if @rating
+    if set_rating
       if @rating.update(rating_params)
         render json: @rating.to_h
       else
         render json: { errors: @rating.errors }, status: :unprocessable_entity
       end
     else
-      render json: { errors: "Couldn't find Rating " }, status: :unprocessable_entity
+      render json: { errors: "Couldn't find Rating" }, status: :unprocessable_entity
     end
   end
 
