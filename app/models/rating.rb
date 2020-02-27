@@ -10,7 +10,8 @@ class Rating < ApplicationRecord
     {
         "id": self.id,
         "kombucha": self.kombucha.name,
-        "score": self.score
+        "score": self.score,
+        "average_score": self.kombucha.average_score
     }
   end
 end

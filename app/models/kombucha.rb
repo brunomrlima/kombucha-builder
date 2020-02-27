@@ -36,4 +36,8 @@ class Kombucha < ApplicationRecord
       where(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_ids_with(attribute, value)}))
     end
   end
+
+  def average_score
+    self.ratings.average(:score)
+  end
 end
