@@ -44,13 +44,19 @@ class Kombucha < ApplicationRecord
   end
 
   def self.n_samples_with_different_base(n_samples, selected_kombucha = nil)
-    kombuchas_list_ids = []
     selected_base_id = selected_kombucha.try(:return_base_id)
-    Ingredient.return_n_different_bases_ids(n_samples, selected_base_id).each do |base_id|
-      kombuchas_list_ids << Kombucha.return_random_kombucha_id(base_id)
-    end
+    ingredients = Ingredient.return_n_different_bases_ids(n_samples, selected_base_id)
+    kombuchas_list_ids = self.return_list_of_random_kombuchas_ids(ingredients)
     kombuchas_list_ids << selected_kombucha.id if selected_kombucha
     kombuchas_list_ids.sort
+  end
+
+  def self.return_list_of_random_kombuchas_ids(ingredients)
+    kombuchas_list_ids = []
+    ingredients.each do |base_id|
+      kombuchas_list_ids << Kombucha.return_random_kombucha_id(base_id)
+    end
+    kombuchas_list_ids
   end
 
   def self.return_random_kombucha_id(base_id)
