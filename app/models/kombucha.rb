@@ -24,13 +24,17 @@ class Kombucha < ApplicationRecord
   def self.filter_by_attribute(attribute, value)
     if attribute == "fizziness_level"
       self.filter_by_fizziness_level(value)
-    else
+    elsif attribute == "caffeine_free" || attribute == "vegan"
       value = JSON.parse(value)
       if value
-        where.not(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_ids_with(attribute, !value)}))
+        where.not(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_with(attribute, !value)}))
       else
-        where(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_ids_with(attribute, value)}))
+        where(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_with(attribute, value)}))
       end
+    elsif attribute == "including"
+      where(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_with("name", value)}))
+    elsif attribute == "not_including"
+      where.not(id: Kombucha.includes(:ingredients).where(ingredients: {id: Ingredient.return_list_of_ingredients_with("name", value)}))
     end
   end
 
