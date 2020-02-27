@@ -11,6 +11,15 @@ class Ingredient < ApplicationRecord
   validates :caffeine_free, inclusion: { in: [ true, false ] }
   validates :vegan, inclusion: { in: [ true, false ] }
 
+  def self.return_list_of_ingredients_from_list_of_names(list_of_names)
+    list_of_names = list_of_names.split(",").map(&:strip)
+    ingredients_ids = []
+    list_of_names.each do |name|
+      ingredients_ids = ingredients_ids | Ingredient.return_list_of_ingredients_with("name", name).pluck(:id)
+    end
+    ingredients_ids
+  end
+
   def self.return_list_of_ingredients_with(attribute, value)
     where("#{attribute} = ?", value)
   end
