@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace "api", module: :api do
     namespace "v1", module: :v1 do
       resources :kombuchas, only: [:index, :show, :create, :update]
+      resources :ratings, only: [:index, :show, :create, :update]
     end
   end
 end
