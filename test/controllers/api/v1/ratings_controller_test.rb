@@ -4,6 +4,7 @@ class Api::V1::RatingsControllerTest < ActionDispatch::IntegrationTest
 
   def setup
     @rating = ratings(:rating_one)
+    @kombucha = kombuchas(:pork_pop)
   end
 
   test "index should work" do
@@ -21,11 +22,11 @@ class Api::V1::RatingsControllerTest < ActionDispatch::IntegrationTest
   #   assert_equal response_body['id'], @kombucha.id
   # end
   #
-  # test "creates a new kombucha" do
-  #   post "/api/v1/kombuchas", params: kombucha_params, headers: headers
-  #   assert_response :success
-  #   assert_not_nil Kombucha.find(response_body['id'])
-  # end
+  test "creates a new rating" do
+    post "/api/v1/ratings", params: rating_params, headers: headers
+    assert_response :success
+    assert_not_nil Rating.find(response_body['id'])
+  end
   #
   # test "does not create kombucha if fizziness level is invalid" do
   #   post "/api/v1/kombuchas", params: invalid_kombucha_params, headers: headers
@@ -46,23 +47,22 @@ class Api::V1::RatingsControllerTest < ActionDispatch::IntegrationTest
   #   assert_not_nil response_body['errors']
   # end
   #
-  # def response_body
-  #   @json ||= JSON.parse(@response.body)
-  # end
-  #
+  def response_body
+    @json ||= JSON.parse(@response.body)
+  end
+
   def headers
     user = users(:first_user)
     { "HTTP_USER_ID": user.id }
   end
   #
-  # def kombucha_params
-  #   {
-  #     kombucha: {
-  #       name: "Orange Pop",
-  #       fizziness_level: "low"
-  #     }
-  #   }
-  # end
+  def rating_params
+    {
+      score: 1,
+      user_id: @rating.user_id,
+      kombucha_id: @kombucha.id
+    }
+  end
   #
   # def invalid_kombucha_params
   #   {
