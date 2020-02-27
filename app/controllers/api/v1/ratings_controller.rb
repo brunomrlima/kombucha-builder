@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V1::RatingsController < ApiController
+  protect_from_forgery with: :null_session, if: Proc.new {|c| c.request.format.json? }
   before_action :authenticate_user!
   # before_action :set_rating, only: [:show, :update]
 
@@ -13,15 +14,14 @@ class Api::V1::RatingsController < ApiController
   #   render json: @kombucha.to_h
   # end
 
-  # def create
-  #   @kombucha = Kombucha.new(kombucha_params)
-  #
-  #   if @kombucha.save
-  #     render json: @kombucha.to_h
-  #   else
-  #     render json: { errors: @kombucha.errors }, status: :unprocessable_entity
-  #   end
-  # end
+  def create
+    @rating = current_user.ratings.new(rating_params)
+    if @rating.save
+      render json: @rating.to_h
+    else
+      render json: { errors: @rating.errors }, status: :unprocessable_entity
+    end
+  end
   #
   # def update
   #   if @kombucha.update(kombucha_params)
@@ -36,9 +36,10 @@ class Api::V1::RatingsController < ApiController
   #     @rating = Rating.find(params[:id])
   #   end
   #
-  #   def kombucha_params
-  #     params.require(:kombucha).permit(:name, :fizziness_level)
-  #   end
+    def rating_params
+      params.permit(:score, :kombucha_id)
+    end
+
   #
   #   def get_filter_params
   #     params.permit(:fizziness_level, :caffeine_free, :vegan)
