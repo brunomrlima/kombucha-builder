@@ -2,6 +2,30 @@
 
 Kombucha Builder is an API for creating and managing kombucha recipes.
 
+## Instructions
+The API was moved to folder V1 for scability. Please use:
+`/api/v1/`
+* [Complete] Feature 1
+    * `params: "fizziness" => "value"`, value in {"low", "medium", "high"}
+    * `params: "caffeine_free" => "true"`, value in {true, false} 
+    * `params: "vegan" => "true"`, value in {true, false} 
+* [Complete] Feature 2:
+    * `/api/v1/ratings`
+* [Complete] Feature 3:
+    * `/api/v1/flights`
+    * optional way to select kombucha recipes greater then a given average rating
+        * `params: "score" => "value"`
+    * optional way to select a particular kombucha recipe as part of the flight.
+        * `params: "kombucha_id" => "value"`
+* [Complete] Feature 4:
+    * Including ingredients
+        * `params: "including" => "value1, value2, ... , valuen"`, where value are the names of the ingredients (separated by commas)
+    * Not Including ingredients
+            * `params: "not_including" => "value1, value2, ... , valuen"`, where value are the names of the ingredients (separated by commas)
+    * Popular recipes
+        * `params: "popularity" => "value"`
+    
+
 ## Setup
 This app uses Rails 5.2 and Ruby 2.6.3.
 
