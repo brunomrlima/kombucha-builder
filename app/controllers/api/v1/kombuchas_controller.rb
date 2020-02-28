@@ -43,6 +43,6 @@ class Api::V1::KombuchasController < ApiController
     end
 
     def get_filter_params
-      params.permit(:fizziness_level, :caffeine_free, :vegan, :including, :not_including)
+      params.permit(:fizziness_level, :caffeine_free, :vegan, :including, :not_including, :popularity)
     end
 end

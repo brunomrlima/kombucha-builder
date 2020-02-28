@@ -38,6 +38,8 @@ class Kombucha < ApplicationRecord
     elsif attribute == "not_including"
       ingredients_ids = Ingredient.return_list_of_ingredients_from_list_of_names(value)
       where.not(id: Kombucha.includes(:ingredients).where(ingredients: {id: ingredients_ids}))
+    elsif attribute == "popularity"
+      Kombucha.all.reject { |kombucha| kombucha.popularity < value.to_i }
     end
   end
 
