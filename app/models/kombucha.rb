@@ -44,27 +44,40 @@ class Kombucha < ApplicationRecord
   end
 
   def average_score
-    self.ratings.average(:score)
+    self.ratings.average(:score).to_f
   end
 
-  def self.n_samples_with_different_base(n_samples, selected_kombucha = nil)
+  def self.n_samples_with_different_base(n_samples, selected_score = nil, selected_kombucha = nil)
+    puts "n_samples"
+    puts n_samples
+    selected_score = selected_score.to_f
     selected_base_id = selected_kombucha.try(:return_base_id)
     ingredients = Ingredient.return_n_different_bases_ids(n_samples, selected_base_id)
-    kombuchas_list_ids = self.return_list_of_random_kombuchas_ids(ingredients)
-    kombuchas_list_ids << selected_kombucha.id if selected_kombucha
+    puts "n_ingredients"
+    puts ingredients.count
+    kombuchas_list_ids = self.return_list_of_random_kombuchas_ids(ingredients, selected_score)
+    kombuchas_list_ids << selected_kombucha.id if selected_kombucha.present?
     kombuchas_list_ids.sort
   end
 
-  def self.return_list_of_random_kombuchas_ids(ingredients)
+  def self.return_list_of_random_kombuchas_ids(ingredients, selected_score)
     kombuchas_list_ids = []
     ingredients.each do |base_id|
-      kombuchas_list_ids << Kombucha.return_random_kombucha_id(base_id)
+      random_kombucha_id = Kombucha.return_random_kombucha_id(base_id, selected_score)
+      puts "random_kombucha_id"
+      puts random_kombucha_id
+      kombuchas_list_ids << random_kombucha_id if random_kombucha_id.present?
     end
     kombuchas_list_ids
   end
 
-  def self.return_random_kombucha_id(base_id)
-    self.where(id: self.includes(:ingredients).where(ingredients: {id: base_id})).order('RANDOM()').first.id
+  def self.return_random_kombucha_id(base_id, selected_score)
+    kombucha = self.return_kombucha_with(base_id, selected_score)
+    kombucha.sample.try(:id)
+  end
+
+  def self.return_kombucha_with(base_id, selected_score)
+    self.where(id: self.includes(:ingredients).where(ingredients: {id: base_id})).reject{|kombucha| kombucha.average_score < selected_score }
   end
 
   def return_base_id
