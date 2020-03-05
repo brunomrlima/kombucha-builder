@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180315222214) do
+ActiveRecord::Schema.define(version: 2020_02_27_170118) do
+
+  create_table "flight_items", force: :cascade do |t|
+    t.integer "kombucha_id"
+    t.integer "flight_id"
+    t.index ["flight_id", "kombucha_id"], name: "index_flight_items_on_flight_id_and_kombucha_id", unique: true
+    t.index ["flight_id"], name: "index_flight_items_on_flight_id"
+    t.index ["kombucha_id"], name: "index_flight_items_on_kombucha_id"
+  end
+
+  create_table "flights", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "ingredients", force: :cascade do |t|
     t.string "name"
@@ -24,6 +38,17 @@ ActiveRecord::Schema.define(version: 20180315222214) do
   create_table "kombuchas", force: :cascade do |t|
     t.string "name"
     t.string "fizziness_level"
+  end
+
+  create_table "ratings", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "kombucha_id"
+    t.integer "score", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["kombucha_id"], name: "index_ratings_on_kombucha_id"
+    t.index ["user_id", "kombucha_id"], name: "index_ratings_on_user_id_and_kombucha_id", unique: true
+    t.index ["user_id"], name: "index_ratings_on_user_id"
   end
 
   create_table "recipe_items", force: :cascade do |t|

@@ -4,6 +4,10 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   namespace "api", module: :api do
-    resources :kombuchas, only: [:index, :show, :create, :update]
+    namespace "v1", module: :v1 do
+      resources :kombuchas, only: [:index, :show, :create, :update]
+      resources :ratings, only: [:index, :show, :create, :update]
+      resources :flights, only: [:index, :show, :create, :update]
+    end
   end
 end

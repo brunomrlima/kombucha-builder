@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-class Api::KombuchasController < ApiController
+class Api::V1::KombuchasController < ApiController
+  skip_before_action :verify_authenticity_token, :except => [:update, :create]
+  protect_from_forgery with: :null_session, only: [:update, :create]
   before_action :authenticate_user!
   before_action :set_kombucha, only: [:show, :update]
 
   def index
-    @kombuchas = Kombucha.all
+    @kombuchas = Kombucha.filter_attributes(get_filter_params)
     render json: @kombuchas.map(&:to_h), status: :ok
   end
 
@@ -38,5 +40,9 @@ class Api::KombuchasController < ApiController
 
     def kombucha_params
       params.require(:kombucha).permit(:name, :fizziness_level)
+    end
+
+    def get_filter_params
+      params.permit(:fizziness_level, :caffeine_free, :vegan, :including, :not_including, :popularity)
     end
 end

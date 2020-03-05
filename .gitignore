@@ -21,3 +21,8 @@
 /yarn-error.log
 
 .byebug_history
+
+# ignoring MacOS files
+.idea
+.generators
+.DS_Store
